@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 from aiohttp import ClientSession
+from async_lru import alru_cache
 
 
 class HTTPClient:
@@ -25,7 +26,7 @@ class HTTPClient:
 
 
 class CMCHttpClient(HTTPClient):
-
+    @alru_cache()
     async def get_listings(self) -> list[Dict[str, Any]]:
         """
         Asynchronously retrieves a list of the latest cryptocurrency listings.
@@ -35,6 +36,7 @@ class CMCHttpClient(HTTPClient):
             result = await resp.json()
             return result["data"]
 
+    @alru_cache()
     async def get_currency(self, currency_id: int) -> dict[str, Any]:
         """
         A function to retrieve currency information based on the provided currency ID.
